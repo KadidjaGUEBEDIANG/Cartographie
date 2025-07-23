@@ -1,32 +1,37 @@
 # COMMENT UTILISER LE PACKAGE
-Pour utiliser le package Cartographie, il suffit d'exécuter ces codes mais en adaotat les chemins d'accès aux votres:
+
+  ## Installation du package
+
+```r
+# Installer depuis GitHub
 remotes::install_github("KadidjaGUEBEDIANG/Cartographie")
+```
+ ## Exemple d'utilisation
 
+```r
+# Charger les bibliothèques nécessaires
+library(CARTOGRAPHIE)
+library(haven)
+library(readxl)
+library(sf)
 
-  library(consoLaitierR)
+# Charger les fichiers de données
+laitier <- read_dta("C:/Users/LENOVO/Desktop/R_project/laitier.dta")
+df_conv <- read_excel("C:/Users/LENOVO/Desktop/R_project/conversion.xlsx")
+membres <- read_dta("C:/Users/LENOVO/Desktop/R_project/S00_S01_membres.dta")
+adresse <- read_dta("C:/Users/LENOVO/Desktop/R_project/Ehcvm_all.dta")
+shapefile <- st_read("C:/Users/LENOVO/Desktop/projet_8_visualisation/Base/Limite_Région.shp")
 
-  data <- Etape1_traitement_initial("C:/Users/LENOVO/Desktop/R_project/Data/Raw/Base_X*.dta")
+# Traitement
+baseconso <- Etape1_conso_régionale(laitier, df_conv, membres, adresse)
 
-  baseVUmenage <- Etape2_analyse_valeurs_unitaires_et_sources(data)
-
-  base_semi_apuree <- Etape3_conversion_standardisation(
-  data,
-  baseVUmenage,
-  "C:/Users/LENOVO/Desktop/R_project/conversion.xlsx"
+# Visualisation cartographique
+Vie <- visualiser_consommation_par_region(
+  baseconso,
+  shapefile_path = "C:/Users/LENOVO/Desktop/projet_8_visualisation/Base/Limite_Région.shp",
+  titre = "Consommation moyenne par tête par région"
 )
 
-  Ehcvm_all <- read_dta("C:/Users/LENOVO/Desktop/R_project/Ehcvm_all.dta")
-
-  Base_X1_Apurée <- Etape4_nettoyage_validation(
-  base_semi_apuree,
-  data,
-  "C:/Users/LENOVO/Desktop/R_project",
-  Ehcvm_all
-)
-  View(Base_X1_Apurée)
-  fin <- Etape5_calcul_indicateurs(Base_X1_Apurée, data)
-  View(fin$indice_simpson)
-  View(fin$part_achat)
-  View(fin$part_autoconsommation)
-  View(fin$part_recue)
-  View(fin$diversite_sources)
+# Affichage
+Vie
+```
