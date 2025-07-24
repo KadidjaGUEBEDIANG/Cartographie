@@ -21,7 +21,7 @@ Etape1_conso_régionale <- function(base_brute, df_conv, membres, adresse) {
   # 1. Renommer les colonnes de la base brute
   base_brute <- base_brute %>%
     rename(
-      menage = interview__key,
+      menage = !!sym(names(base_brute)[1]),
       produit = !!sym(names(base_brute)[3]),
       quantite_consommee = !!sym(names(base_brute)[5]),
       unite = !!sym(names(base_brute)[6]),
