@@ -14,7 +14,7 @@
 #'
 #' @examples
 #' conso_par_tete_region(laitier, df_conv, membres, adresse)
-Etape1_conso_régionale <- function(base_brute, df_conv, membres, adresse) {
+Etape1_conso_regionale <- function(base_brute, df_conv, membres, adresse) {
   library(dplyr)
   library(stringr)
 
@@ -73,7 +73,7 @@ Etape1_conso_régionale <- function(base_brute, df_conv, membres, adresse) {
 
   # 8. Ajouter l’adresse (région, milieu)
   adresse <- adresse %>%
-    select(IDs = !!sym(names(adresse)[2]), région = !!sym(names(adresse)[7]), milieu = !!sym(names(adresse)[9]))
+    select(IDs = !!sym(names(adresse)[2]), region = !!sym(names(adresse)[7]), milieu = !!sym(names(adresse)[9]))
 
   # 9. Fusion de tout
   base_combinee <- df_merge %>%
@@ -82,8 +82,8 @@ Etape1_conso_régionale <- function(base_brute, df_conv, membres, adresse) {
 
   # 10. Agrégation par région
   base_finale <- base_combinee %>%
-    filter(!is.na(région), !is.na(quantite_standard_kg), !is.na(Taille_Menage)) %>%
-    group_by(région) %>%
+    filter(!is.na(region), !is.na(quantite_standard_kg), !is.na(Taille_Menage)) %>%
+    group_by(region) %>%
     summarise(
       Quantite_totale_kg = sum(quantite_standard_kg, na.rm = TRUE),
       Population_totale = sum(Taille_Menage, na.rm = TRUE),
