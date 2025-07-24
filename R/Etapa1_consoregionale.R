@@ -63,17 +63,17 @@ Etape1_conso_régionale <- function(base_brute, df_conv, membres, adresse) {
     select(menage, produit, unite, taille, quantite_standard_kg)
 
   # 6. Récupérer l’identifiant `IDs`
-  df_merge$IDs <- base_brute$interview__id
+  df_merge$IDs <- base_brute$!!sym(names(base_brute)[2])
 
   # 7. Ajouter la taille du ménage
   membres <- membres %>%
-    rename(IDs = interview__id) %>%
+    rename(IDs = !!sym(names(base_brute)[2])) %>%
     group_by(IDs) %>%
     summarise(Taille_Menage = n(), .groups = "drop")
 
   # 8. Ajouter l’adresse (région, milieu)
   adresse <- adresse %>%
-    select(IDs = interview__id, région = s00q01, milieu = s00q04)
+    select(IDs = !!sym(names(adresse)[2]), région = !!sym(names(adresse)[7]), milieu = !!sym(names(adresse)[9]))
 
   # 9. Fusion de tout
   base_combinee <- df_merge %>%
