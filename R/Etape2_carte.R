@@ -1,10 +1,10 @@
-#' Visualise la consommation moyenne par tête par région sur une carte (version robuste)
+#' Visualise la consommation moyenne par tête par region sur une carte (version robuste)
 #'
 #' @param baseconso DataFrame contenant au minimum les colonnes "region" (nom ou code) et "conso_moy_kg"
-#' @param shapefile_path Chemin vers le fichier shapefile (.shp) des régions
+#' @param shapefile_path Chemin vers le fichier shapefile (.shp) des regions
 #' @param titre Titre de la carte (optionnel)
 #'
-#' @return Une carte tmap représentant la consommation moyenne par tête par région
+#' @return Une carte tmap représentant la consommation moyenne par tête par region
 #' @export
 #'
 #' @import dplyr sf stringi tmap
@@ -21,21 +21,21 @@ visualiser_consommation_par_region <- function(baseconso, shapefile_path, titre 
                     "KAOLACK", "THIES", "LOUGA", "FATICK", "KOLDA",
 
                     "MATAM", "KAFFRINE", "KEDOUGOU", "SEDHIOU")
-  baseconso$région <- noms_regions[baseconso$région]
+  baseconso$region <- noms_regions[baseconso$region]
 
   # Lecture du shapefile
   shapefile <- st_read(shapefile_path, quiet = TRUE)
 
   #correspondance
   correspondance <- data.frame(
-    région = as.character(1:14),
+    region = as.character(1:14),
     NOMREG = c("DAKAR", "ZIGUINCHOR", "DIOURBEL", "SAINT LOUIS", "TAMBACOUNDA",
                "KAOLACK", "THIES", "LOUGA", "FATICK", "KOLDA",
                "MATAM", "KAFFRINE", "KEDOUGOU", "SEDHIOU")
   )
 
   baseconso <- baseconso %>%
-    mutate(NOMREG = région)
+    mutate(NOMREG = region)
 
 
 
