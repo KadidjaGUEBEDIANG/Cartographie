@@ -14,18 +14,18 @@
 #'
 #' @examples
 #' conso_par_tete_region(laitier, df_conv, membres, adresse)
-Etape1_conso_régionale <- function(base_brute, df_conv, membres, adresse) {
+Etape1_conso_regionale <- function(base_brute, df_conv, membres, adresse) {
   library(dplyr)
   library(stringr)
 
   # 1. Renommer les colonnes de la base brute
   base_brute <- base_brute %>%
     rename(
-      menage = interview__key,
+      menage = !!sym(names(base_brute)[1]),
       produit = !!sym(names(base_brute)[3]),
-      quantite_consommee = !!sym(names(base_brute)[5]),
-      unite = !!sym(names(base_brute)[6]),
-      taille = !!sym(names(base_brute)[7])
+      quantite_consommee = !!sym(names(base_brute)[4]),
+      unite = !!sym(names(base_brute)[5]),
+      taille = !!sym(names(base_brute)[6])
     )
   base_brute <- base_brute %>%
     mutate(
@@ -63,17 +63,17 @@ Etape1_conso_régionale <- function(base_brute, df_conv, membres, adresse) {
     select(menage, produit, unite, taille, quantite_standard_kg)
 
   # 6. Récupérer l’identifiant `IDs`
-  df_merge$IDs <- base_brute$interview__id
+  df_merge$IDs <- base_brute[[2]]
 
   # 7. Ajouter la taille du ménage
   membres <- membres %>%
-    rename(IDs = interview__id) %>%
+    rename(IDs = !!sym(names(base_brute)[2])) %>%
     group_by(IDs) %>%
     summarise(Taille_Menage = n(), .groups = "drop")
 
   # 8. Ajouter l’adresse (région, milieu)
   adresse <- adresse %>%
-    select(IDs = interview__id, région = s00q01, milieu = s00q04)
+    select(IDs = !!sym(names(adresse)[2]), region = !!sym(names(adresse)[7]), milieu = !!sym(names(adresse)[9]))
 
   # 9. Fusion de tout
   base_combinee <- df_merge %>%
@@ -82,8 +82,8 @@ Etape1_conso_régionale <- function(base_brute, df_conv, membres, adresse) {
 
   # 10. Agrégation par région
   base_finale <- base_combinee %>%
-    filter(!is.na(région), !is.na(quantite_standard_kg), !is.na(Taille_Menage)) %>%
-    group_by(région) %>%
+    filter(!is.na(region), !is.na(quantite_standard_kg), !is.na(Taille_Menage)) %>%
+    group_by(region) %>%
     summarise(
       Quantite_totale_kg = sum(quantite_standard_kg, na.rm = TRUE),
       Population_totale = sum(Taille_Menage, na.rm = TRUE),
