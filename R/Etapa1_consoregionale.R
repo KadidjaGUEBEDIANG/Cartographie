@@ -23,9 +23,9 @@ Etape1_conso_régionale <- function(base_brute, df_conv, membres, adresse) {
     rename(
       menage = !!sym(names(base_brute)[1]),
       produit = !!sym(names(base_brute)[3]),
-      quantite_consommee = !!sym(names(base_brute)[5]),
-      unite = !!sym(names(base_brute)[6]),
-      taille = !!sym(names(base_brute)[7])
+      quantite_consommee = !!sym(names(base_brute)[4]),
+      unite = !!sym(names(base_brute)[5]),
+      taille = !!sym(names(base_brute)[6])
     )
   base_brute <- base_brute %>%
     mutate(
