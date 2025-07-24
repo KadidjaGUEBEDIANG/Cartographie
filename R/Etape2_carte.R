@@ -1,14 +1,14 @@
-#' Visualise la consommation moyenne par tête par region sur une carte (version robuste)
+#' Visualise la consommation moyenne par tête par région sur une carte (version robuste)
 #'
-#' @param baseconso DataFrame contenant au minimum les colonnes "region" (nom ou code) et "conso_moy_kg"
-#' @param shapefile_path Chemin vers le fichier shapefile (.shp) des regions
+#' @param baseconso DataFrame contenant au minimum les colonnes "région" (nom ou code) et "conso_moy_kg"
+#' @param shapefile_path Chemin vers le fichier shapefile (.shp) des régions
 #' @param titre Titre de la carte (optionnel)
 #'
-#' @return Une carte tmap représentant la consommation moyenne par tête par region
+#' @return Une carte tmap représentant la consommation moyenne par tête par région
 #' @export
 #'
 #' @import dplyr sf stringi tmap
-visualiser_consommation_par_region <- function(baseconso, shapefile_path, titre = "Consommation moyenne par tête (kg)") {
+visualiser_consommation_par_région <- function(baseconso, shapefile_path, titre = "Consommation moyenne par tête (kg)") {
   library(dplyr)
   library(sf)
   library(tmap)
@@ -16,26 +16,26 @@ visualiser_consommation_par_region <- function(baseconso, shapefile_path, titre 
 
 
 
-  noms_regions <- c("DAKAR", "ZIGUINCHOR", "DIOURBEL", "SAINT LOUIS", "TAMBACOUNDA",
+  noms_régions <- c("DAKAR", "ZIGUINCHOR", "DIOURBEL", "SAINT LOUIS", "TAMBACOUNDA",
 
                     "KAOLACK", "THIES", "LOUGA", "FATICK", "KOLDA",
 
                     "MATAM", "KAFFRINE", "KEDOUGOU", "SEDHIOU")
-  baseconso$region <- noms_regions[baseconso$region]
+  baseconso$région <- noms_régions[baseconso$région]
 
   # Lecture du shapefile
   shapefile <- st_read(shapefile_path, quiet = TRUE)
 
   #correspondance
   correspondance <- data.frame(
-    region = as.character(1:14),
+    région = as.character(1:14),
     NOMREG = c("DAKAR", "ZIGUINCHOR", "DIOURBEL", "SAINT LOUIS", "TAMBACOUNDA",
                "KAOLACK", "THIES", "LOUGA", "FATICK", "KOLDA",
                "MATAM", "KAFFRINE", "KEDOUGOU", "SEDHIOU")
   )
 
   baseconso <- baseconso %>%
-    mutate(NOMREG = region)
+    mutate(NOMREG = région)
 
 
 
