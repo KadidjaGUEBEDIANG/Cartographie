@@ -13,7 +13,7 @@
 #' @export
 #'
 #' @examples
-#' conso_par_tete_région(laitier, df_conv, membres, adresse)
+#' conso_par_tete_region(laitier, df_conv, membres, adresse)
 Etape1_conso_régionale <- function(base_brute, df_conv, membres, adresse) {
   library(dplyr)
   library(stringr)
@@ -21,11 +21,11 @@ Etape1_conso_régionale <- function(base_brute, df_conv, membres, adresse) {
   # 1. Renommer les colonnes de la base brute
   base_brute <- base_brute %>%
     rename(
-      menage = !!sym(names(base_brute)[1]),
+      menage = interview__key,
       produit = !!sym(names(base_brute)[3]),
-      quantite_consommee = !!sym(names(base_brute)[4]),
-      unite = !!sym(names(base_brute)[5]),
-      taille = !!sym(names(base_brute)[6])
+      quantite_consommee = !!sym(names(base_brute)[5]),
+      unite = !!sym(names(base_brute)[6]),
+      taille = !!sym(names(base_brute)[7])
     )
   base_brute <- base_brute %>%
     mutate(
@@ -63,17 +63,17 @@ Etape1_conso_régionale <- function(base_brute, df_conv, membres, adresse) {
     select(menage, produit, unite, taille, quantite_standard_kg)
 
   # 6. Récupérer l’identifiant `IDs`
-  df_merge$IDs <- base_brute[[2]]
+  df_merge$IDs <- base_brute$interview__id
 
   # 7. Ajouter la taille du ménage
   membres <- membres %>%
-    rename(IDs = !!sym(names(base_brute)[2])) %>%
+    rename(IDs = interview__id) %>%
     group_by(IDs) %>%
     summarise(Taille_Menage = n(), .groups = "drop")
 
   # 8. Ajouter l’adresse (région, milieu)
   adresse <- adresse %>%
-    select(IDs = !!sym(names(adresse)[2]), région = !!sym(names(adresse)[7]), milieu = !!sym(names(adresse)[9]))
+    select(IDs = interview__id, région = s00q01, milieu = s00q04)
 
   # 9. Fusion de tout
   base_combinee <- df_merge %>%
